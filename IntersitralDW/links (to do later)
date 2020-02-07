@@ -1,0 +1,37 @@
+on("change:repeating_links_dark", function(eventInfo) {
+	getSectionIDs("repeating_links_dark", function(ids) {
+	    if (ids.length == 0){
+	        setAttrs({
+	            dark_link_query: "(0)[Other Link]"
+	        });
+	        return;
+	    }
+	    
+	    var attrs = [];
+	    for(var i=0; i < ids.length; i++) {
+	        var attr = "repeating_links_dark_" + ids[i] + "_link_simple";
+			attrs.push(attr);
+	    }
+	    console.log(ids);
+	    
+	    getAttrs(attrs, function(v) {
+	        var links = {};
+	        _.each(v, function(val, attrName) {
+	            if (val in links){
+	                links[val] += 1;
+	            }else{
+	                links[val] = 1;
+	            }
+	        });
+	        
+	        var query = "?{Link_dark";
+	        _.each(links, function(count, name) {
+	            query = query.concat(`|${name}, (${count})[Links with ${name}]`);
+	        });
+	        query = query.concat("|Other, (0)[Other Link]}");
+	        
+	        setAttrs({
+	            dark_link_query: query
+	        });
+	    });
+	}

@@ -765,7 +765,9 @@ button span {
 	min-height: 84px;
 	align-items: flex-start;
 	
-} 
+}
+
+ 
 .sheet-dw-links textarea
 {
 	max-width: 93%;
@@ -774,7 +776,14 @@ button span {
 	min-height:84px;
 	align-self: center;
 	align-items: flex-start;
-	height: 84px:
+	height: 84px;
+}
+.sheet-dw-links input[type="text"]
+{
+	max-width: 80%;
+	min-width: 80%;
+	width: 80%;
+	align-self: left;
 }
 
 .sheet-dw-stat-circle {

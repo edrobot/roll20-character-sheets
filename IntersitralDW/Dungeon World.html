@@ -3,7 +3,7 @@
 <input type="hidden" name="attr_sheet_version" value="110">
 <input type="hidden" name="attr_populate_moves" value="all">
 <input type="hidden" name="attr_rolltype" value="2d6">
-<input type="hidden" name="attr_statmod_query" value="?{Stat|LIGHT,@{light_mod}[light]|DARK, @{dark_mod}[dark]|MASTERY, @{mastery_mod}[mastery]|HEART, @{heart_mod}[heart]|WIS, @{wisdom_mod}[wisdom]|CHA, @{charisma_mod}[charisma]}">
+<input type="hidden" name="attr_statmod_query" value="?{Stat|LIGHT,@{light_mod}[light]|DARK, @{dark_mod}[dark]|MASTERY, @{mastery_mod}[mastery]|HEART, @{heart_mod}[heart]}">
 <input type="hidden" name="attr_levels_prepared" value="0">
 <input type="hidden" name="attr_global_dmg" value="0">
 <input type="hidden" name="attr_global_arm" value="0">
@@ -17,6 +17,7 @@
 <input type="hidden" name="attr_dark_links" value="0">
 <input type="hidden" name="attr_mastery_links" value="0">
 <input type="hidden" name="attr_bond_query" value="(0)[Other Bond]">
+<input type="hidden" name="attr_link_query" value="?{Bonds|0}">
 
 <!-- 
 <input type="hidden" name="attr_level0_name" value="@{rotename}">
@@ -187,7 +188,7 @@
 			<input type="number" min="0" class="hitpoints" name="attr_HP" value="0">
 			<input type="number" min="0" class="max-hitpoints" name="attr_HP_max" value="0">
 		</div>
-		<div class="vital mid-header damage-container">
+<!-- 		<div class="vital mid-header damage-container">
 			<button type="roll" name="roll_damage" value="&{template:dwgeneral} {{charname=@{character_name}}} {{rollname=^{classdamage}}} {{result=[[@{damagedie} + @{equipment_dmg} + @{global_dmg}]]}}">
 			<span class="label" data-i18n="damage-u">DAMAGE</span>
 			</button>
@@ -199,7 +200,7 @@
 				<option value="d12">d12</option>
 				<option value="d20">d20</option>
 			</select>
-		</div>
+		</div> -->
 	</div>
 <!-- 	<div class="mid-module alignment-container">
 		<div class="mid-header">
@@ -219,7 +220,7 @@
 			<div class="dw-statbox">
 				<div class="dw-stat-header">
 					<span class="dw-statname-long" data-i18n="light">Strength</span>
-					<input type="number" name="attr_light" value="10">
+					<input type="number" name="attr_light" value="0">
 				</div>
 				<div class="dw-stat-debility">
 						<label><span class="dw-debility-name" data-i18n="weak-1">Weak -1</span>
@@ -243,7 +244,7 @@
 			<div class="dw-statbox">
 				<div class="dw-stat-header">
 					<span class="dw-statname-long" data-i18n="dark">Dexterity</span>
-					<input type="number" name="attr_dark" value="10">
+					<input type="number" name="attr_dark" value="0">
 				</div>
 				<div class="dw-stat-debility">
 						<label><span class="dw-debility-name" data-i18n="shaky-1">Shaky -1</span>
@@ -267,7 +268,7 @@
 			<div class="dw-statbox">
 				<div class="dw-stat-header">
 					<span class="dw-statname-long" data-i18n="mastery">Constitution</span>
-					<input type="number" name="attr_mastery" value="10">
+					<input type="number" name="attr_mastery" value="0">
 				</div>
 				<div class="dw-stat-debility">
 						<label><span class="dw-debility-name" data-i18n="sick-1">Sick -1</span>
@@ -291,7 +292,7 @@
 			<div class="dw-statbox">
 				<div class="dw-stat-header">
 					<span class="dw-statname-long" data-i18n="heart">Intelligence</span>
-					<input type="number" name="attr_heart" value="10">
+					<input type="number" name="attr_heart" value="0">
 				</div>
 				<div class="dw-stat-debility">
 						<label><span class="dw-debility-name" data-i18n="stunned-1">Stunned -1</span>
@@ -500,10 +501,8 @@
 								<option value="@{dark_mod}[dark]" data-i18n="dark-u">DARK</option>
 								<option value="@{mastery_mod}[mastery]" data-i18n="mastery-u">MASTERY</option>
 								<option value="@{heart_mod}[heart]" data-i18n="heart-u">HEART</option>
-								<option value="@{wisdom_mod}[wisdom]" data-i18n="wis-u">WIS</option>
-								<option value="@{charisma_mod}[charisma]" data-i18n="cha-u">CHA</option>
 								<option value="@{statmod_query}" data-i18n="ask-u">ASK</option>
-								<option value="@{bond_query}" data-i18n="bond-u">BOND</option>
+								<option value="@{link_query}" data-i18n="bond-u">LINK</option>
 							</select>
 							<span class="label moveroll"> + </span>
 							<input class="moveroll" type="number" name="attr_movemod" value="0" />
@@ -944,89 +943,100 @@
 
 // Storing the data for moves right in the sheet, as js object.
 var dwMoves = {
-	hackandslash: {
+	deepDive: {
 		class: "Basic",
-		fullname: "Hack & Slash",
-		trigger: "When you attack an enemy in melee",
-		roll: "LIGHT",
-		success: "Deal your damage to the enemy and avoid their attack.\nAt your option, you may choose to do +1d6 damage but expose yourself to the enemy's attack.",
-		partial: "Deal your damage to the enemy, and the enemy makes an attack against you.",
-		miss: "Miss!"
+		fullname: "Deep Dive",
+		trigger: "When you confront the situation in front of you and ask questions",
+		roll: "HEART",
+		success: "Ask 3",
+		partial: "Ask 1",
+		miss: "The GM tells you something you wish wasn't true",
+		details: "• What here could I use to ____?\n• What here is not as it seems?\n• What is the best way out of this situation?\n• What is the biggest threat here?\n• What was done here recently?\nYou gain +1 Forward to acting on the answers."
 	},
-	volley: {
+	convinceSomebody: {
 		class: "Basic",
-		fullname: "Volley",
-		trigger: "When you take aim and shoot at an enemy at range",
+		fullname: "Convince Somebody",
+		trigger: "When you tell someone what you want from them and are trying to get them to do it",
 		roll: "DARK",
-		success: "You have a clear shot—deal your damage.",
-		partial: "Deal your damage, and choose one:\n• You have to move to get the shot placing you in danger of the GM's choice\n• You have to take what you can get: -1d6 damage.\n• You have to take several shots, reducing your ammo by one.",
-		miss: "Miss!"
+		success: "NPC: They'll do it, until something puts them in danger or reveals your true intentions.\n PC: both",
+		partial: "NPC: They’ll do it, but need some clear assurance or evidence first.\nPC: Choose one:\n",
+		miss: "Prepare for the worst.",
+		details: "PC: • If they do it, they mark experience. \n• If they refuse, they lose a Link."
 	},
-	parley: {
+	makeALink: {
 		class: "Basic",
-		fullname: "Parley",
-		trigger: "When you have leverage on a GM character and manipulate them",
-		roll: "CHA",
-		success: "They ask you for something and do it if you make them a promise first.",
-		partial: "They ask you for something and do it if you make them a promise, but they need concrete assurance of your promise, right now.",
-		details: "Leverage is something that character needs or wants."
-	},
-	defydanger: {
-		class: "Basic",
-		fullname: "Defy Danger",
-		trigger: "When you act despite an imminent threat or suffer a calamity",
+		fullname: "Make a Link",
+		trigger: "When you meet someone for the first time, or make an emotional breakthrough with someone you already know, you form a connection with a character, or Make a Link. Roll based on the kind of relationship. Dark Links are rivals, Light Links are friends, Heart Links is introspection, and Mastery Links are students and teachers. \nWhen you roll a link that is based off your highest stat, gain +1 on the roll. When you roll for your lowest stat, Mark Experience.",
 		roll: "ASK",
-		success: "You do what you set out to, the threat doesn't come to bear.",
-		partial: "You stumble, hesitate, or flinch: the GM will offer you a worse outcome, hard bargain, or ugly choice.",
-		details: "• by powering through, +Str\n• by getting out of the way or acting fast, +Dex\n• by enduring, +Con\n• with quick thinking, +Int\n• through mental fortitude, +Wis\n• sing charm and social grace, +Cha"
+		success: "You both get a Link on one another, and your Link Move triggers.",
+		partial: "Your Link move doesn’t trigger, or the Link isn’t what you intended.",
+		miss: "your Link Move doesn’t trigger, The GM gives you a Link, but also picks one:\n• Make a Move as hard as you want\n• Someone else gets a Link"
 	},
-	defydangerstr: {
+	limitBreak: {
 		class: "Basic",
-		fullname: "Defy Danger (Str)",
-		trigger: "When you act despite an imminent threat or suffer a calamity, and deal with it by powering through",
+		fullname: "Limit Break",
+		trigger: "When you help out your friends or create an oppurtunity for them.",
 		roll: "LIGHT",
-		success: "You do what you set out to, the threat doesn't come to bear.",
-		partial: "You stumble, hesitate, or flinch: the GM will offer you a worse outcome, hard bargain, or ugly choice."
+		success: "You give +1 Forward to an ally.",
+		partial: "It costs you.\n• Spend a Link\n• Take Harm",
+		miss: "Make things worse."
 	},
-	defydangerdex: {
+	castMagic: {
 		class: "Basic",
-		fullname: "Defy Danger (Dex)",
-		trigger: "When you act despite an imminent threat or suffer a calamity, and deal with it by getting out of the way or acting fast",
-		roll: "DARK",
-		success: "You do what you set out to, the threat doesn't come to bear.",
-		partial: "You stumble, hesitate, or flinch: the GM will offer you a worse outcome, hard bargain, or ugly choice."
-	},
-	defydangercon: {
-		class: "Basic",
-		fullname: "Defy Danger (Con)",
-		trigger: "When you act despite an imminent threat or suffer a calamity, and deal with it by enduring",
+		fullname: "Cast Magic",
+		trigger: "When you use magic in any meaningful way.",
 		roll: "MASTERY",
-		success: "You do what you set out to, the threat doesn't come to bear.",
-		partial: "You stumble, hesitate, or flinch: the GM will offer you a worse outcome, hard bargain, or ugly choice."
+		success: "Describe your magic and pick 3:",
+		partial: "Same as a sucess, but pick 1.",
+		details: "\n• The Magic opens something.\n• The Magic causes 1 Harm.\n• The Magic heals 1 Harm.\n• The Magic hits more then one entity.\n• The Magic has no unintended consquences.\n• The Magic creates an illusion.\n• The Magic inflicts a semi-permanent condition.\n• The Magic bypasses defenses."
 	},
-	defydangerint: {
+	strikeWithIntent: {
+		class: "Basic",
+		fullname: "Strike with Intent",
+		trigger: "When you move to cause Harm against another",
+		roll: "DARK",
+		success: "Deal Harm, and choose two.",
+		partial: "Deal harm and choose one.",
+		miss: "You take harm, and the GM makes a move.",
+		details: "\n• Defend yourself from Harm\n• Deal Great Harm (+1 Harm)\n• Take Control of the situation"
+	},
+	strikeToSubdue: {
+		class: "Basic",
+		fullname: "Strike to Subdue",
+		trigger: "When you try to fight another without causing harm.",
+		roll: "MASTERY",
+		success: "Deal Harm, and choose two.",
+		partial: "Deal harm and choose one.",
+		miss: "You take harm, and the the situation escalates.",
+		details:"\n• Take Something From Them\n• Force a Change of Location\n• De-escalate the Situation"
+	},
+	defendFromHarm: {
 		class: "Basic",
 		fullname: "Defy Danger (Int)",
-		trigger: "When you act despite an imminent threat or suffer a calamity, and deal with it with quick thinking",
-		roll: "HEART",
-		success: "You do what you set out to, the threat doesn't come to bear.",
-		partial: "You stumble, hesitate, or flinch: the GM will offer you a worse outcome, hard bargain, or ugly choice."
+		trigger: "When you try to prevent or avoid danger or Harm from happening to either yourself or others.",
+		roll: "LIGHT",
+		success: "You prevent or avoid the danger.",
+		partial: "It costs you: expose yourself to danger or the GM makes a Move.",
+		miss: "They take harm anyway and the situation escalates."
 	},
-	defydangerwis: {
+	pushThroughStress: {
 		class: "Basic",
-		fullname: "Defy Danger (Wis)",
+		fullname: "Push Through Stress",
 		trigger: "When you act despite an imminent threat or suffer a calamity, and deal with it through mental fortitude",
-		roll: "WIS",
-		success: "You do what you set out to, the threat doesn't come to bear.",
-		partial: "You stumble, hesitate, or flinch: the GM will offer you a worse outcome, hard bargain, or ugly choice."
+		roll: "ASK",
+		success: "Pick two:.",
+		partial: "Pick one:",
+		details: "• Succeed at what you were attempting\n• Take +1 Forward\n• Ask a question about this scene\n• Gain an advantageous position"
 	},
-	defydangercha: {
+	interfere: {
 		class: "Basic",
-		fullname: "Defy Danger (Cha)",
-		trigger: "When you act despite an imminent threat or suffer a calamity, and deal with it with charm and social grace",
-		roll: "CHA",
-		success: "You do what you set out to, the threat doesn't come to bear.",
-		partial: "You stumble, hesitate, or flinch: the GM will offer you a worse outcome, hard bargain, or ugly choice."
+		fullname: "Interfere",
+		trigger: "When you try to stop someone else’s action by using suprise or force, roll with Dark.",
+		roll: "DARK",
+		success: "NPC: They don't do it.\nPC: Choose 2:\n• They are Pushing Through Stress to do it\n• They take experience if they don’t do it",
+		partial: "NPC: They don't do it cleanly; something goes wrong in a dramatic way.\nPC:Choose one.",
+		miss: "\nThey do it, and the GM makes a move as hard as they want. Good luck!",
+		details: "• They are Pushing Through Stress to do it\n• They take experience if they don’t do it"
 	},
 	defend: {
 		class: "Basic",
@@ -1061,7 +1071,7 @@ var dwMoves = {
 		class: "Basic",
 		fullname: "Aid or Interfere",
 		trigger: "When you help or hinder someone you have a Bond with",
-		roll: "BOND",
+		roll: "Link",
 		success: "They take +1 or -2; your choice.",
 		partial: "They take +1 or -2; your choice.  You also expose yourself to danger, retribution, or cost."
 	},
@@ -1074,1272 +1084,7 @@ var dwMoves = {
 		partial: "Death will offer you a bargain.  Take it and stabilize or refuse and pass beyond the Black Gates into whatever fate awaits you.",
 		miss: "Your fate is sealed. You're marked as Death's own and you'll cross the threshold soon. The GM will tell you when."
 	},
-	arcaneart: {
-		class: "Bard",
-		fullname: "Arcane Art",
-		trigger: "When you weave a performance into a basic spell, choose an ally and an effect below.",
-		roll: "CHA",
-		success: "The ally gets the selected effect.",
-		partial: "Your spell still works, but you draw unwanted attention or your magic reverberates to other targets affecting them as well, GM’s choice.",
-		details: "• Heal 1d8 damage\n• +1d4 forward to damage\n• Their mind is shaken clear of one enchantment\n• The next time someone successfully assists the target with aid, they get +2 instead of +1\n"
-	},
-	charmingandopen: {
-		class: "Bard",
-		fullname: "Charming and Open",
-		trigger: "When you speak frankly with someone",
-		roll: "NONE",
-		details: "You can ask their player a question from the list below. They must answer it truthfully, then they may ask you a question from the list (which you must answer truthfully).\n• Whom do you serve?\n• What do you wish I would do?\n• How can I get you to _____?\n• What are you really feeling right now? • What do you most desire?"
-	},
-	bardiclore: {
-		class: "Bard",
-		fullname: "Bardic Lore",
-		trigger: "When you first encounter an important creature, location, or item (your call) covered by your bardic lore",
-		roll: "NONE",
-		details: "Choose an area of expertise, then remove the rest.\n• Spells and Magicks\n• The Dead and Undead\n• Grand Histories of the Known World A Bestiary of Creatures Unusual The Planar Spheres\n• Legends of Heroes Past\n• Gods and Their Servants\n\nYou can ask the GM any one question about it; the GM will answer truthfully. The GM may then ask you what tale, song, or legend you heard that information in."
-	},
-	aportinthestorm: {
-		class: "Bard",
-		fullname: "A Port In The Storm",
-		trigger: "When you return to a civilized settlement you've visited before",
-		roll: "NONE",
-		details: "Tell the GM when you were last here. They’ll tell you how it’s changed since then."
-	},
-	signatureweapon: {
-		class: "Fighter",
-		fullname: "Signature Weapon",
-		trigger: "When you create your character",
-		details: "This is your weapon. There are many like it, but this one is yours. Your weapon is your best friend. It is your life. You Master it as you Master your life. Your weapon, without you, is useless. Without your weapon, you are useless. You must wield your weapon true.\n\nChoose a base description, all are 2 weight:\n\n• Sword\n• Axe\n• Hammer\n• Spear\n• Flail\n• Fists\nChoose the range that best fits your weapon:\n\n• Hand\n• Close\n• Reach\nChoose two enhancements:\n\n• Hooks and spikes. +1 damage, but +1 weight.\n• Sharp. +2 piercing.\n• Perfectly weighted. Add precise.\n• Serrated edges. +1 damage.\n• Glows in the presence of one type of creature, your choice.\n• Huge. Add messy and forceful.\n• Versatile. Choose an additional range.\n• Well-crafted. -1 weight.\nChoose a look:\n\n• Ancient\n• Unblemished\n• Ornate\n• Blood-stained\n• Sinister"
-	},
-	bendbarsliftgates: {
-		class: "Fighter",
-		fullname: "Bend Bars, Lift Gates",
-		trigger: "When you use pure light to destroy an inanimate obstacle",
-		roll: "LIGHT",
-		success: "Choose 3:",
-		partial: "Choose 2:",
-		miss: "Choose none.",
-		details: "• It doesn't take a very long time\n• Nothing of value is damaged\n• It doesn't make an inordinate amount of noise\n• You can fix the thing again without a lot of effort"
-	},
-	alittlehelpfrommyfriends: {
-		class: "Bard",
-		fullname: "A Little Help From My Friends",
-		roll: "NONE",
-		details: "When you successfully aid someone you take +1 forward as well."
-	},
-	aportinthestorm: {
-		class: "Bard",
-		fullname: "A Port in the Storm",
-		roll: "NONE",
-		details: "When you return to a civilized settlement you’ve visited before, tell the GM when you were last here. They’ll tell you how it’s changed since then."
-	},
-	asafeplace: {
-		class: "Ranger",
-		fullname: "A Safe Place",
-		trigger: "When you set the watch for the night",
-		roll: "NONE",
-		details: "Everyone takes +1 to take watch."
-	},
-	asaferplace: {
-		class: "Ranger",
-		fullname: "A Safer Place",
-		trigger: "When you set the watch for the night",
-		roll: "NONE",
-		details: "Everyone takes +1 to take watch. After a night in camp when you set the watch everyone takes +1 forward."
-	},
-	alchemist: {
-		class: "Thief",
-		fullname: "Alchemist",
-		trigger: "When you have you have time to gather materials and a safe place to brew",
-		roll: "NONE",
-		details: "You can create three doses of any poison you’ve used before. Alternately you can describe the effects of a poison you’d like to create. The GM will tell you that you can create it, but with one or more caveats:\n\n• It will only work under specific circumstances\n• The best you can manage is a weaker version\n• It’ll take a while to take effect\n• It’ll have obvious side effects"
-	},
-	anearformagic: {
-		class: "Bard",
-		fullname: "An Ear for Magic",
-		trigger: "When you hear an enemy Cast a Spell",
-		roll: "NONE",
-		details: "The GM will tell you the name of the spell and its effects. Take +1 forward when acting on the answers."
-	},
-	animalcompanion: {
-		class: "Ranger",
-		fullname: "Animal Companion",
-		roll: "NONE",
-		details: "You have a supernatural connection with a loyal animal. You can’t talk to it per se but it always acts as you wish it to. Name your animal companion and choose a species:\n\nWolf, cougar, bear, eagle, dog, hawk, cat, owl, pigeon, rat, mule\n\nChoose a base:\n\n• Ferocity +2, Cunning +1, 1 Armor, Instinct +1\n• Ferocity +2, Cunning +2, 0 Armor, Instinct +1\n• Ferocity +1, Cunning +2, 1 Armor, Instinct +1\n• Ferocity +3, Cunning +1, 1 Armor, Instinct +2\n\nChoose as many lights as its ferocity:\n\nFast, burly, huge, calm, adaptable, quick reflexes, tireless, Camouflage, ferocious, intimidating, keen senses, stealthy\n\nYour animal companion is trained to fight humanoids. Choose as many additional trainings as its cunning:\n\nHunt, search, scout, guard, fight monsters, perform, labor, travel\n\nChoose as many weaknesses as its instinct:\n\nFlighty, savage, slow, broken, frightening, forgetful, stubborn, lame"
-	},
-	anointed: {
-		class: "Cleric",
-		fullname: "Anointed",
-		roll: "NONE",
-		details: "Choose one spell in addition to the one you picked for Chosen One. You are granted that spell as if it was one level lower."
-	},
-	apotheosis: {
-		class: "Cleric",
-		fullname: "Apotheosis",
-		trigger: "The first time you spend time in prayer as appropriate to your god after taking this move",
-		roll: "NONE",
-		details: "Choose a feature associated with your deity (rending claws, wings of sapphire feathers, an all-seeing third eye, etc.). When you emerge from prayer, you permanently gain that physical feature."
-	},
-	arcanearmor: {
-		class: "Wizard",
-		fullname: "Arcane Armor",
-		roll: "NONE",
-		details: "As long as you have at least one prepared spell of first level or higher, you have +4 armor."
-	},
-	arcaneward: {
-		class: "Wizard",
-		fullname: "Arcane Ward",
-		trigger: "As long as you have at least one prepared spell of first level or higher",
-		roll: "NONE",
-		details: "You have +2 armor"
-	},
-	armormastery: {
-		class: "Fighter",
-		fullname: "Armor Mastery",
-		trigger: "When you make your armor take the brunt of damage dealt to you",
-		roll: "NONE",
-		details: "The damage is negated but you must reduce the armor value of your armor or shield (your choice) by 1. The value is reduced each time you make this choice. If the reduction leaves the item with 0 armor it is destroyed."
-	},
-	armored: {
-		class: "Fighter",
-		fullname: "Armored",
-		roll: "NONE",
-		details: "You ignore the clumsy tag on any armor you wear."
-	},
-	armoredperfection: {
-		class: "Fighter",
-		fullname: "Armored Perfection",
-		trigger: "When you choose to let your armor take the brunt of damage dealt to you",
-		roll: "NONE",
-		details: "The damage is negated and you take +1 forward against the attacker, but you must reduce the armor value of your armor or shield (your choice) by 1. The value is reduced each time you make this choice. If the reduction leaves the item with 0 armor it is destroyed."
-	},
-	backstab: {
-		class: "Thief",
-		fullname: "Backstab",
-		trigger: "When you attack a surprised or defenseless enemy with a melee weapon, you can choose to deal your damage, or roll+Dex",
-		roll: "DARK",
-		success: "Choose two:",
-		partial: "Choose one:",
-		miss: "Choose none.",
-		details: "• You don’t get into melee with them\n• You deal your damage+1d6\n• You create an advantage, +1 forward to you or an ally acting on it\n• Reduce their armor by 1 until they Repair it"
-	},
-	balance: {
-		class: "Druid",
-		fullname: "Balance",
-		trigger: "When you deal damage",
-		roll: "NONE",
-		details: "Take 1 balance. When you touch someone and channel the spirits of life you may spend balance. For each balance spent, heal 1d4 HP."
-	},
-	bamboozle: {
-		class: "Bard",
-		fullname: "Bamboozle",
-		trigger: "When you parley with someone",
-		roll: "NONE",
-		details: "You also take +1 forward with them."
-	},
-	barkskin: {
-		class: "Druid",
-		fullname: "Barkskin",
-		roll: "NONE",
-		details: "So long as your feet touch the ground, you have +1 armor."
-	},
-	blacksmith: {
-		class: "Fighter",
-		fullname: "Blacksmith",
-		roll: "NONE",
-		trigger: "When you have access to a forge",
-		details: "You can graft the magical powers of a weapon onto your Signature Weapon. This process destroys the magical weapon. Your Signature Weapon gains the magical powers of the destroyed weapon."
-	},
-	bloodandthunder: {
-		class: "Druid",
-		fullname: "Blood and Thunder",
-		trigger: "When you are in an appropriate animal form (something dangerous)",
-		details: "Increase your damage to d10."
-	},
-	bloodthirsty: {
-		class: "Fighter",
-		fullname: "Bloodthirsty",
-		trigger: "When you deal damage",
-		details: "Deal +1d8 damage."
-	},
-	bloodyaegis: {
-		class: "Paladin",
-		fullname: "Bloody Aegis",
-		trigger: "When you take damage you can grit your teeth and accept the blow",
-		details: "If you do you take no damage but instead suffer a debility of your choice. If you already have all six debilities you can’t use this move."
-	},
-	blotoutthesun: {
-		class: "Ranger",
-		fullname: "Blot Out the Sun",
-		trigger: "When you volley you may spend extra ammo before rolling",
-		details: "For each point of ammo spent you may choose an extra target. Roll once and apply damage to all targets."
-	},
-	bornofthesoil: {
-		class: "Druid",
-		fullname: "Born of the Soil",
-		details: "You learned your magic in a place whose spirits are strong and ancient and they’ve marked you as one of their own. No matter where you go, they live within you and allow you to take their shape. Choose one of the following; remove the rest. It is the land to which you are attuned—when shapeshifting you may take the shape of any animal who might live in your Land.\n\n• The Great Forests\n• The Whispering Plains\n• The Vast Desert\n• The Stinking Mire\n• The River Delta\n• The Depths of the Earth\n• The Sapphire Islands\n• The Open Sea\n• The Towering Mountains\n• The Frozen North\n• The Blasted Wasteland\n\nChoose a tell—a physical attribute that marks you as born of the soil—that reflects the spirit of your land. It may be an animal feature like antlers or leopard’s spots or something more general: hair like leaves or eyes of glittering crystal. Your tell remains no matter what shape you take."
-	},
-	brewer: {
-		class: "Thief",
-		fullname: "Brewer",
-		trigger: "When you have time to gather materials and a safe place to brew",
-		details: "You can create three doses of any one poison you’ve used before."
-	},
-	bynaturesustained: {
-		class: "Druid",
-		fullname: "By Nature Sustained",
-		details: "You don’t need to eat or drink. If a move tells you to mark off a ration just ignore it."
-	},
-	calledshot: {
-		class: "Ranger",
-		fullname: "Called Shot",
-		trigger: "When you attack a defenseless or surprised enemy at range, you can choose to deal your damage, or name your target (Head, Arms, or Legs) and roll+DARK.",
-		roll: "DARK",
-		success:"Head: Deal your damage, and they do nothing but stand and drool for a few moments.\nArms: Deal your damage, and they drop anything they’re holding.\nLegs: Deal your damage, and they’re hobbled and slow moving.",
-		partial:"Head: They do nothing but stand and drool for a few moments.\nArms: They drop anything they’re holding.\nLegs: They’re hobbled and slow moving.",
-		miss:"You miss the mark entirely."
-	},
-	camouflage: {
-		class: "Ranger",
-		fullname: "Camouflage",
-		trigger: "When you keep still in natural surroundings",
-		details: "Enemies never spot you until you make a movement."
-	},
-	castaspell: {
-		class: "Cleric",
-		fullname: "Cast a Spell (WIS)",
-		trigger: "When you unleash a spell granted to you by your deity",
-		roll: "WIS",
-		success: "The spell is successfully cast and your deity does not revoke the spell, so you may cast it again.",
-		partial: "The spell is cast, but choose one:\n\n• You draw unwelcome attention or put yourself in a spot. The GM will tell you how.\n• Your casting distances you from your deity—take -1 ongoing to cast a spell until the next time you Commune.\n• After you cast it, the spell is revoked by your deity. You cannot cast the spell again until you Commune and have it granted to you.",
-		miss: "The spell fails.",
-		details: "Note that maintaining spells with ongoing effects will sometimes cause a penalty to your roll to cast a spell."
-	},
-	castaspellint: {
-		class: "Wizard",
-		fullname: "Cast a Spell (HEART)",
-		trigger: "When you release a spell you’ve prepared",
-		roll: "HEART",
-		success: "The spell is successfully cast and you do not forget the spell—you may cast it again later.",
-		partial: "The spell is cast, but choose one:\n\n• You draw unwelcome attention or put yourself in a spot. The GM will tell you how.\n• The spell disturbs the fabric of reality as it is cast—take -1 ongoing to Cast a Spell until the next time you Prepare Spells.\n• After it is cast, the spell is forgotten. You cannot cast the spell again until you Prepare Spells.",
-		miss: "The spell fails.",
-		details: "Note that maintaining spells with ongoing effects will sometimes cause a penalty to your roll to Cast a Spell."
-	},
-	cautious: {
-		class: "Thief",
-		fullname: "Cautious",
-		details: "When you use Trap Expert you always get +1 hold, even on a 6-."
-	},
-	charge: {
-		class: "Paladin",
-		fullname: "Charge!",
-		trigger: "When you lead the charge into combat",
-		details: "Those you lead take +1 forward."
-	},
-	cheapshot: {
-		class: "Thief",
-		fullname: "Cheap Shot",
-		trigger: "When using a precise or hand weapon",
-		details: "Your Backstab deals an extra +1d6 damage."
-	},
-	chimera: {
-		class: "Druid",
-		fullname: "Chimera",
-		trigger: "When you shapeshift",
-		details: "You may create a merged form of up to three different shapes. You may be a bear with the wings of an eagle and the head of a ram, for example. Each feature will grant you a different move to make. Your chimera form follows the same rules as Shapeshifter otherwise."
-	},
-	chosenone: {
-		class: "Cleric",
-		fullname: "Chosen One",
-		details: "Choose one spell. You are granted that spell as if it was one level lower."
-	},
-	command: {
-		class: "Ranger",
-		fullname: "Command",
-		trigger: "When you work with your Animal Companion on something it's trained in...",
-		details: "• ...and you attack the same target, add its ferocity to your damage\n• ...and you track, add its cunning to your roll\n• ...and you take damage, add its armor to your armor\n• ...and you discern realities, add its cunning to your roll\n• ...and you parley, add its cunning to your roll\n• ...and someone interferes with you, add its instinct to their roll"
-	},
-	commune: {
-		class: "Cleric",
-		fullname: "Commune",
-		trigger: "When you spend uninterrupted time (an hour or so) in quiet communion with your deity, you:",
-		details: "• Lose any spells already granted to you.\n• Are granted new spells of your choice whose total levels don’t exceed your own level+1, and none of which is a higher level than your own level.\n• Prepare all of your rotes, which never count against your limit."
-	},
-	communionofwhispers: {
-		class: "Druid",
-		fullname: "Communion of Whispers",
-		trigger: "When you spend time in a place, making note of its resident spirits and calling on the spirits of the land",
-		roll: "WIS",
-		success: "You are  granted a vision of significance to you, your allies, and the spirits around you.  The vision is clear and helpful to you.",
-		partial: "You are  granted a vision of significance to you, your allies, and the spirits around you, but it is unclear, its meaning murky.",
-		miss: "You are granted a vision of significance to you, your allies, and the spirits around you, but the vision is upsetting, frightening, or traumatizing. The GM will describe it. Take -1 forward."
-	},
-	con: {
-		class: "Bard",
-		fullname: "Con",
-		trigger: "When you parley with someone",
-		details: "On a 7+ you also take +1 forward with them and get to ask their player one question which they must answer truthfully."
-	},
-	connections: {
-		class: "Thief",
-		fullname: "Connections",
-		trigger: "When you put out word to the criminal underbelly about something you want or need",
-		roll: "CHA",
-		success: "Someone has it, just for you.",
-		partial: "You’ll have to settle for something close or it comes with strings attached, your call.",
-		miss: "You don't get it."
-	},
-	counterspell: {
-		class: "Wizard",
-		fullname: "Counterspell",
-		trigger: "When you attempt to counter an arcane spell that will otherwise affect you, stake one of your prepared spells on the defense.",
-		success: "The spell is countered and has no effect on you.",
-		partial: "the spell is countered and you forget the spell you staked.",
-		miss: "You fail to counter the spell.",
-		details: "Your counterspell protects only you; if the countered spell has other targets they get its effects."
-	},
-	deity: {
-		class: "Cleric",
-		fullname: "Deity",
-		details: "You serve and worship some deity or power which grants you spells. Give your god a name (maybe Helferth, Sucellus, Zorica or Krugon the Bleak) and choose your deity’s domain:\n\n• Healing and Restoration\n• Bloody Conquest\n• Civilization\n• Knowledge and Hidden Things\n• The Downtrodden and Forgotten\n• What Lies Beneath\n\nChoose one precept of your religion:\n\n• Your religion preaches the sanctity of suffering, add Petition: Suffering\n• Your religion is cultish and insular, add Petition: Gaining Secrets\n• Your religion has important sacrificial rites, add Petition: Offering\n• Your religion believes in trial by combat, add Petition: Personal Victory"
-	},
-	devious: {
-		class: "Bard",
-		fullname: "Devious",
-		trigger: "When you use Charming and Open",
-		details: "You may also ask “How are you vulnerable to me?” Your subject may not ask this question of you."
-	},
-	devotedhealer: {
-		class: "Cleric",
-		fullname: "Devoted Healer",
-		trigger: "When you heal someone else of damage",
-		details: "Add your level to the amount of damage healed."
-	},
-	dirtyfighter: {
-		class: "Thief",
-		fullname: "Dirty Fighter",
-		trigger: "When using a precise or hand weapon",
-		details: "Your Backstab deals an extra +1d8 damage and all other attacks deal +1d4 damage."
-	},
-	disguise: {
-		class: "Thief",
-		fullname: "Disguise",
-		trigger: "When you have time and materials",
-		details: "You can create a disguise that will fool anyone into thinking you’re another creature of about the same size and shape. Your actions can give you away but your appearance won’t."
-	},
-	divinearmor: {
-		class: "Cleric",
-		fullname: "Divine Armor",
-		trigger: "When you wear no armor or shield",
-		details: "You get 3 armor."
-	},
-	divineauthority: {
-		class: "Paladin",
-		fullname: "Divine Authority",
-		details: "Take +1 to order hirelings. When you roll a 12+ the hireling transcends their moment of fear and doubt and carries out your order with particular effectiveness or efficiency."
-	},
-	divinefavor: {
-		class: "Paladin",
-		fullname: "Divine Favor",
-		details: "Dedicate yourself to a deity (name a new one or choose one that’s already been established). You gain the Commune and Cast a Spell Cleric moves. When you select this move, treat yourself as a Cleric of level 1 for using spells. Every time you gain a level thereafter, increase your effective Cleric level by 1."
-	},
-	divineguidance: {
-		class: "Cleric",
-		fullname: "Divine Guidance",
-		trigger: "When you petition your deity according to the precept of your religion",
-		details: "You are granted some useful knowledge or boon related to your deity’s domain. The GM will tell you what."
-	},
-	divineintervention: {
-		class: "Cleric",
-		fullname: "Divine Intervention",
-		trigger: "When you Commune",
-		details: "You get 1 hold and lose any hold you already had. Spend that hold when you or an ally takes damage to call on your deity, they intervene with an appropriate manifestation (a sudden gust of wind, a lucky slip, a burst of light) and negate the damage."
-	},
-	divineinvincibility: {
-		class: "Cleric",
-		fullname: "Divine Intervention",
-		trigger: "When you Commune",
-		details: "You gain 2 hold and lose any hold you already had. Spend that hold when you or an ally takes damage to call on your deity, who intervenes with an appropriate manifestation (a sudden gust of wind, a lucky slip, a burst of light) and negates the damage."
-	},
-	divineprotection: {
-		class: "Paladin",
-		fullname: "Divine Protection",
-		trigger: "While on a quest",
-		details: "You get +2 armor."
-	},
-	doppelgngersdance: {
-		class: "Druid",
-		fullname: "Doppelgänger’s Dance",
-		details: "You are able to study the essence of specific individuals to take their exact form, including men, elves, or the like. Suppressing your tell is possible, but if you do, take -1 ongoing until you return to your own form."
-	},
-	duelistsblock: {
-		class: "Bard",
-		fullname: "Duelist's Block",
-		trigger: "When you Hack and Slash",
-		details: "You take +2 armor forward."
-	},
-	duelistsparry: {
-		class: "Bard",
-		fullname: "Duelist's Parry",
-		trigger: "When you Hack and Slash",
-		details: "You take +1 armor forward."
-	},
-	dwarfcleric: {
-		class: "Cleric",
-		fullname: "Dwarf (Cleric)",
-		details: "You are one with stone. When you Commune you are also granted a special version of Words of the Unspeaking as a rote which only works on stone."
-	},
-	dwarffighter: {
-		class: "Fighter",
-		fullname: "Dwarf (Fighter)",
-		trigger: "When you share a drink with someone",
-		details: "You may parley with them using MASTERY instead of CHA."
-	},
-	eldritchchord: {
-		class: "Bard",
-		fullname: "Eldritch Chord",
-		trigger: "When you use Arcane Art",
-		details: "You choose two effects. You also get to choose one of those effects to double."
-	},
-	eldritchtones: {
-		class: "Bard",
-		fullname: "Eldritch Tones",
-		details: "Your Arcane Art is strong, allowing you to choose two effects instead of one."
-	},
-	elementalmastery: {
-		class: "Druid",
-		fullname: "Elemental Mastery",
-		trigger: "When you call on the primal spirits of fire, water, earth or air to perform a task for you",
-		roll: "WIS",
-		success: "Choose two:\n• The effect you desire comes to pass\n• You avoid paying nature’s price\n• You retain control",
-		partial: "Choose one:\n• The effect you desire comes to pass\n• You avoid paying nature’s price\n• You retain control",
-		miss: "Some catastrophe occurs as a result of your calling."
-	},
-	elfbard: {
-		class: "Bard",
-		fullname: "Elf (Bard)",
-		details: "When you enter an important location (your call) you can ask the GM for one fact from the history of that location."
-	},
-	elfdruid: {
-		class: "Druid",
-		fullname: "Elf (Druid)",
-		details: "The sap of the elder trees flows within you. In addition to any other attunements, the Great Forest is always considered your land."
-	},
-	elffighter: {
-		class: "Fighter",
-		fullname: "Elf (Fighter)",
-		details: "Choose one weapon—you can always treat weapons of that type as if they had the precise tag."
-	},
-	elfranger: {
-		class: "Ranger",
-		fullname: "Elf (Ranger)",
-		details: "When you undertake a perilous journey through wilderness whatever job you take you succeed as if you rolled a 10+."
-	},
-	elfwizard: {
-		class: "Wizard",
-		fullname: "Elf (Wizard)",
-		details: "Magic is as natural as breath to you. Detect Magic is a cantrip for you."
-	},
-	embracingnoform: {
-		class: "Druid",
-		fullname: "Embracing No Form",
-		details: "When you shapeshift, roll 1d4 and add that total to your hold."
-	},
-	empower: {
-		class: "Cleric",
-		fullname: "Empower",
-		trigger: "When you cast a spell, on a 10+ you have the option of choosing from the 7-9 list.",
-		details: "If you do, you may choose one of these effects as well:\n• The spell's effects are doubled\n• The spell's targets are doubled"
-	},
-	empoweredmagic: {
-		class: "Wizard",
-		fullname: "Empowered Magic",
-		trigger: "When you cast a spell, on a 10+ you have the option of choosing from the 7-9 list.",
-		details: "If you do, you may choose one of these effects as well:\n• The spell's effects are maximized\n• The spell's targets are doubled"
-	},
-	enchanter: {
-		class: "Wizard",
-		fullname: "Enchanter",
-		trigger: "When you have time and safety with a magic item",
-		details: "You may ask the GM what it does, the GM will answer you truthfully."
-	},
-	enchanterssoul: {
-		class: "Wizard",
-		fullname: "Enchanter’s Soul",
-		trigger: "When you have time and safety with a magic item in a place of power",
-		details: "You can Empower that item so that the next time you use it its effects are amplified, the GM will tell you exactly how."
-	},
-	envenom: {
-		class: "Thief",
-		fullname: "Envenom",
-		details: "You can apply even complex poisons with a pinprick. When you apply a poison that’s not dangerous for you to use to your weapon it’s touch instead of applied."
-	},
-	escaperoute: {
-		class: "Thief",
-		fullname: "Escape Route",
-		trigger: "When you’re in too deep and need a way out, name your escape route and roll",
-		roll: "DARK",
-		success: "You're gone.",
-		partial: "You can stay or go, but if you go it costs you: leave something behind or take something with you, the GM will tell you what."
-	},
-	etherealtether: {
-		class: "Wizard",
-		fullname: "Ethereal Tether",
-		trigger: "When you have time with a willing or helpless subject",
-		details: "You can craft an ethereal tether with them. You perceive what they perceive and can discern realities about someone tethered to you or their surroundings no matter the distance. Someone willingly tethered to you can communicate with you over the tether as if you were in the room with them."
-	},
-	evasion: {
-		class: "Thief",
-		fullname: "Evasion",
-		trigger: "When you defy danger on a 12+",
-		details: "You transcend the danger. You not only do what you set out to, but the GM will offer you a better outcome, true beauty, or a moment of grace."
-	},
-	everonward: {
-		class: "Paladin",
-		fullname: "Ever Onward",
-		trigger: "When you lead the charge into combat",
-		details: "Those you lead take +1 forward and +2 armor forward."
-	},
-	evidenceoffaith: {
-		class: "Paladin",
-		fullname: "Evidence of Faith",
-		trigger: "When you see divine magic as it happens",
-		details: "You can ask the GM which deity granted the spell and its effects. Take +1 when acting on the answers."
-	},
-	evileye: {
-		class: "Fighter",
-		fullname: "Evil Eye",
-		trigger: "When you enter combat",
-		roll: "CHA",
-		success: "Hold 2. Spend your hold to make eye contact with an NPC present, who freezes or flinches and can’t act until you break it off.",
-		partial: "Hold 1. Spend your hold to make eye contact with an NPC present, who freezes or flinches and can’t act until you break it off.",
-		miss: "Your enemies immediately identify you as their biggest threat."
-	},
-	expandedspellbook: {
-		class: "Wizard",
-		fullname: "Expanded Spellbook",
-		details: "Add a new spell from the spell list of any class to your Spellbook."
-	},
-	exterminatus: {
-		class: "Paladin",
-		fullname: "Exterminatus",
-		trigger: "When you speak aloud your promise to defeat an enemy",
-		details: "You deal +2d4 damage against that enemy and -4 damage against anyone else. This effect lasts until the enemy is defeated. If you fail to defeat the enemy or give up the fight, you can admit your failure, but the effect continues until you find a way to redeem yourself."
-	},
-	extremelycautious: {
-		class: "Thief",
-		fullname: "Extremely Cautious",
-		trigger: "When you use Trap Expert",
-		details: "You always get +1 hold, even on a 6-. On a 12+ you get 3 hold and the next time you come near a trap the GM will immediately tell you what it does, what triggers it, who set it, and how you can use it to your advantage."
-	},
-	eyeforweaponry: {
-		class: "Fighter",
-		fullname: "Eye for Weaponry",
-		trigger: "When you look over an enemy’s weaponry",
-		details: "Ask the GM how much damage they do."
-	},
-	eyesofthetiger: {
-		class: "Druid",
-		fullname: "Eyes of the Tiger",
-		trigger: "When you mark an animal (with mud, dirt, or blood)",
-		details: "You can see through that animal’s eyes as if they were your own, no matter what distance separates you. Only one animal at a time may be marked in this way."
-	},
-	familiarprey: {
-		class: "Ranger",
-		fullname: "Familiar Prey",
-		trigger: "When you spout lore about a monster",
-		details: "You use WIS instead of HEART"
-	},
-	firstaid: {
-		class: "Cleric",
-		fullname: "First Aid",
-		details: "Cure Light Wounds is a rote for you, and therefore doesn’t count against your limit of granted spells."
-	},
-	flexiblemorals: {
-		class: "Thief",
-		fullname: "Flexible Morals",
-		details: "When someone tries to detect your alignment you can tell them any alignment you like."
-	},
-	followme: {
-		class: "Ranger",
-		fullname: "Follow Me",
-		trigger: "When you undertake a perilous journey",
-		partial: "You can take two roles. You make a separate roll for each."
-	},
-	formcrafter: {
-		class: "Druid",
-		fullname: "Formcrafter",
-		trigger: "When you shapeshift",
-		details: "Choose a stat: you take +1 ongoing to rolls using that stat while shifted. The GM will choose a stat, too: you take -1 ongoing to rolls using that stat while shifted."
-	},
-	formshaper: {
-		class: "Druid",
-		fullname: "Formshaper",
-		details: "You may increase your armor by 1 or deal an additional +1d4 damage while in an animal form. Choose which when you shapeshift."
-	},
-	fountofknowledge: {
-		class: "Wizard",
-		fullname: "Fount of Knowledge",
-		trigger: "When you spout lore about something no one else has any clue about",
-		details: "Take +1."
-	},
-	godamidstthewastes: {
-		class: "Ranger",
-		fullname: "God Admidst the Wastes",
-		details: "Dedicate yourself to a deity (name a new one or choose one that’s already been established). You gain the Commune and Cast a Spell Cleric moves. When you select this move, treat yourself as a Cleric of level 1 for using spells. Every time you gain a level thereafter, increase your effective Cleric level by 1."
-	},
-	greaterempower: {
-		class: "Cleric",
-		fullname: "Greater Empower",
-		trigger: "When you Cast a Spell",
-		details: "On a 10–11 you have the option of choosing from the 7–9 list. If you do, you may choose one of these effects as well. On a 12+ you get to choose one of these effects for free:\n• The spell's effects are doubled\n• The spell's targets are doubled"
-	},
-	greaterempoweredmagic: {
-		class: "Wizard",
-		fullname: "Greater Empowered Magic",
-		trigger: "When you Cast a Spell",
-		details: "On a 10–11 you have the option of choosing from the 7–9 list. If you do, you may choose one of these effects as well. On a 12+ you get to choose one of these effects for free:\n• The spell's effects are maximized\n• The spell's targets are doubled"
-	},
-	greaterfirstaid: {
-		class: "Cleric",
-		fullname: "Greater First Aid",
-		details: "Cure Moderate Wounds is a rote for you, and therefore doesn’t count against your limit of granted spells."
-	},
-	halfelven: {
-		class: "Ranger",
-		fullname: "Half-Elven",
-		details: "Somewhere in your lineage lies mixed blood and it begins to show its presence. You gain the elf starting move if you took the human one at character creation or vice versa."
-	},
-	halflingdruid: {
-		class: "Druid",
-		fullname: "Halfling (Druid)",
-		details: "You sing the healing songs of spring and brook. When you make camp, you and your allies heal +1d6."
-	},
-	halflingfighter: {
-		class: "Fighter",
-		fullname: "Halfling (Fighter)",
-		trigger: "When you defy danger and use your small size to your advantage",
-		details: "Take +1."
-	},
-	halflingthief: {
-		class: "Thief",
-		fullname: "Halfling (Thief)",
-		trigger: "When you attack with a ranged weapon",
-		details: "Deal +2 damage."
-	},
-	healingchorus: {
-		class: "Bard",
-		fullname: "Healing Chorus",
-		trigger: "When you heal with Arcane Art",
-		details: "You heal +2d8 damage."
-	},
-	healingsong: {
-		class: "Bard",
-		fullname: "Healing Song",
-		trigger: "When you heal with Arcane Art",
-		details: "You heal +1d8 damage."
-	},
-	heirloom: {
-		class: "Fighter",
-		fullname: "Heirloom",
-		trigger: "When you consult the spirits that reside within your Signature Weapon, they will give you an insight relating to the current situation, and might ask you some questions in return",
-		roll: "CHA",
-		success: "The GM will give you good detail.",
-		partial: "The GM will give you an impression."
-	},
-	heist: {
-		class: "Thief",
-		fullname: "Heist",
-		trigger: "When you take time to make a plan to steal something, name the thing you want to steal.",
-		details: "Ask the GM these questions. When acting on the answers you and your allies take +1 forward.\n\n• Who will notice it’s missing?\n• What’s its most powerful defense?\n• Who will come after it?\n• Who else wants it?"
-	},
-	highlylogical: {
-		class: "Wizard",
-		fullname: "Highly Logical",
-		trigger: "When you use strict deduction to analyze your surroundings",
-		details: "You can discern realities with Int instead of Wis. On a 12+ you get to ask the GM any three questions, not limited by the list."
-	},
-	holyprotection: {
-		class: "Paladin",
-		fullname: "Holy Protection",
-		details: "You get +1 armor while on a quest."
-	},
-	holysmite: {
-		class: "Paladin",
-		fullname: "Holy Smite",
-		details: "While on a quest you deal +1d8 damage."
-	},
-	hospitaller: {
-		class: "Paladin",
-		fullname: "Hospitaller",
-		details: "When you heal an ally, you heal +1d8 damage."
-	},
-	humanbard: {
-		class: "Bard",
-		fullname: "Human (Bard)",
-		trigger: "When you first enter a civilized settlement",
-		details: "Someone who respects the custom of hospitality to minstrels will take you in as their guest."
-	},
-	humancleric: {
-		class: "Cleric",
-		fullname: "Human (Cleric)",
-		details: "Your faith is diverse. Choose one Wizard spell. You can cast and be granted that spell as if it was a Cleric spell."
-	},
-	humandruid: {
-		class: "Druid",
-		fullname: "Human (Druid)",
-		details: "As your people learned to bind animals to field and farm, so too are you bound to them. You may always take the shape of any domesticated animal, in addition to your normal options."
-	},
-	humanfighter: {
-		class: "Fighter",
-		fullname: "Human (Fighter)",
-		details: "Once per battle you may reroll a single damage roll (yours or someone else’s)."
-	},
-	humanpaladin: {
-		class: "Paladin",
-		fullname: "Human (Paladin)",
-		trigger: "When you pray for Guidance, even for a moment, and ask, \"What here is evil?\"",
-		details: "The GM will tell you, honestly."
-	},
-	humanranger: {
-		class: "Ranger",
-		fullname: "Human (Ranger)",
-		trigger: "When you make camp in a dungeon or city",
-		details: "You don’t need to consume a ration."
-	},
-	humanthief: {
-		class: "Thief",
-		fullname: "Human (Thief)",
-		details: "You are a professional. When you spout lore or discern realities about criminal activities, take +1."
-	},
-	humanwizard: {
-		class: "Wizard",
-		fullname: "Human (Wizard)",
-		details: "Choose one Cleric spell. You can cast it as if it was a Wizard spell."
-	},
-	huntandtrackwis: {
-		class: "Ranger",
-		fullname: "Hunt and Track (Wis)",
-		trigger: "When you follow a trail of clues left behind by passing creatures",
-		roll: "WIS",
-		success: "You follow the creature’s trail until there’s a significant change in its direction or mode of travel. Also, choose 1:\n• Gain a useful bit of information about your quarry, the GM will tell you what\n• Determine what caused the trail to end",
-		partial: "You follow the creature’s trail until there’s a significant change in its direction or mode of travel."
-	},
-	huntersbrother: {
-		class: "Druid",
-		fullname: "Hunter's Brother",
-		details: "Choose one move from the Ranger class list."
-	},
-	huntersprey: {
-		class: "Ranger",
-		fullname: "Hunter's Prey",
-		trigger: "When you spout lore about a monster",
-		details: "You use WIS instead of HEART. On a 12+, in addition to the normal effects, you get to ask the GM any one question about the subject."
-	},
-	iamthelaw: {
-		class: "Paladin",
-		fullname: "I Am the Law",
-		trigger: "When you give an NPC an order based on your Divine Authority",
-		roll: "CHA",
-		success: "You take +1 forward against them, and they choose one:\n• Do what you say\n• Back away cautiously, then flee\n• Attack you",
-		partial: "They choose one:\n• Do what you say\n• Back away cautiously, then flee\n• Attack you",
-		miss: "They do as they please and you take -1 forward against them."
-	},
-	imperviousdefender: {
-		class: "Paladin",
-		fullname: "Impervious Defender",
-		trigger: "When you defend",
-		details: "You always get +1 hold, even on a 6-. When you get a 12+ to defend instead of getting hold the nearest attacking creature is stymied giving you a clear advantage, The GM will describe it."
-	},
-	improvedweapon: {
-		class: "Fighter",
-		fullname: "Improved Weapon",
-		details: "Choose one extra enhancement for your Signature Weapon."
-	},
-	indomitable: {
-		class: "Paladin",
-		fullname: "Indomitable",
-		trigger: "When you suffer a debility (even through Bloody Aegis)",
-		details: "Take +1 forward against whatever caused it."
-	},
-	interrogator: {
-		class: "Fighter",
-		fullname: "Interrogator",
-		trigger: "When you parley using threats of impending violence as leverage",
-		details: "You may use LIGHT instead of CHA."
-	},
-	invigorate: {
-		class: "Cleric",
-		fullname: "Invigorate",
-		trigger: "When you heal someone",
-		details: "They take +2 forward to their Damage."
-	},
-	ironhide: {
-		class: "Fighter",
-		fullname: "Iron Hide",
-		details: "You gain +1 armor."
-	},
-	itgoestoeleven: {
-		class: "Bard",
-		fullname: "It Goes To Eleven",
-		trigger: "When you unleash a crazed performance (a righteous lute solo or mighty brass blast, maybe), choose a target who can hear you",
-		roll: "CHA",
-		success: "The target attacks their nearest ally in range.",
-		partial: "They attack their nearest ally, but you also draw their attention and ire.",
-		miss: "Miss!"
-	},
-	knowitall: {
-		class: "Wizard",
-		fullname: "Know-It-All",
-		trigger: "When another player’s character comes to you for advice and you tell them what you think is best",
-		details: "They get +1 forward when following your advice and you mark experience if they do."
-	},
-	layonhandscha: {
-		class: "Paladin",
-		fullname: "Lay on Hands (CHA)",
-		trigger: "When you touch someone, skin to skin, and pray for their well-being",
-		roll: "CHA",
-		success: "You heal 1d8 Damage or remove one disease.",
-		partial: "You heal 1d8 Damage or remove one disease, but said Damage or disease is transferred to you.",
-		miss: "Miss!"
-	},
-	logical: {
-		class: "Wizard",
-		fullname: "Logical",
-		trigger: "When you use strict deduction to analyze your surroundings",
-		details: "You can discern realities with HEART instead of WIS."
-	},
-	mansbestfriend: {
-		class: "Ranger",
-		fullname: "Man's Best Friend",
-		trigger: "When you allow your Animal Companion to take a blow that was meant for you",
-		details: "The Damage is negated and your animal companion’s ferocity becomes 0. If its ferocity is already 0 you can’t use this ability. When you have a few hours of rest with your Animal Companion its ferocity returns to normal."
-	},
-	martyr: {
-		class: "Cleric",
-		fullname: "Martyr",
-		trigger: "When you take Damage and embrace the pain, you may take +1d4 Damage (ignoring armor).",
-		details: "If you do, take +1 forward to Cast a Spell and add your level to any Damage done or healed by the spell."
-	},
-	master: {
-		class: "Wizard",
-		fullname: "Master",
-		details: "Choose one spell in addition to the one you picked for Prodigy. You prepare that spell as if it were one level lower."
-	},
-	merciless: {
-		class: "Fighter",
-		fullname: "Merciless",
-		trigger: "When you deal damage",
-		details: "Deal +1d4 damage."
-	},
-	metalhurlant: {
-		class: "Bard",
-		fullname: "Metal Hurlant",
-		trigger: "When you shout with great force or play a shattering note, choose a target",
-		roll: "MASTERY",
-		success: "The target takes 1d10 Damage and is deafened for a few minutes.",
-		partial: "The target takes 1d10 Damage and is deafened for a few minutes, but it’s out of control: The GM will choose an additional target nearby."
-	},
-	multiclassdabbler: {
-		class: "Fighter",
-		fullname: "Multiclass Dabbler",
-		details: "Get one move from another class. Treat your level as one lower for choosing the move."
-	},
-	multiclassinitiate: {
-		class: "Fighter",
-		fullname: "Multiclass Initiate",
-		details: "Get one move from another class. Treat your level as one lower for choosing the move."
-	},
-	multiclassmaster: {
-		class: "Fighter",
-		fullname: "Multiclass Master",
-		details: "Get one move from another class. Treat your level as one lower for choosing the move."
-	},
-	mysticalpuppetstrings: {
-		class: "Wizard",
-		fullname: "Mystical Puppet Strings",
-		trigger: "When you use magic to control a person’s actions",
-		details: "They have no memory of what you had them do and bear you no ill will."
-	},
-	observant: {
-		class: "Ranger",
-		fullname: "Observant",
-		details: "When you hunt and track, on a hit you may also ask one question about the creature you are tracking from the discern realities list for free."
-	},
-	orisonforguidance: {
-		class: "Cleric",
-		fullname: "Orison for Guidance",
-		trigger: "When you sacrifice something of value to your deity and pray for Guidance",
-		details: "Your deity tells you what it would have you do. If you do it, mark experience."
-	},
-	penitent: {
-		class: "Cleric",
-		fullname: "Penitent",
-		trigger: "When you take Damage and embrace the pain, you may take +1d4 Damage (ignoring armor).",
-		details: "If you do, take +1 forward to Cast a Spell."
-	},
-	perfecthospitaller: {
-		class: "Paladin",
-		fullname: "Perfect Hospitaller",
-		trigger: "When you heal an ally",
-		details: "You heal +2d8 damage."
-	},
-	perfectknight: {
-		class: "Paladin",
-		fullname: "Perfect Knight",
-		details: "When you quest you choose three boons instead of two."
-	},
-	poisoner: {
-		class: "Thief",
-		fullname: "Poisoner",
-		details: "You’ve mastered the care and use of a poison. Choose a poison from the list below; that poison is no longer dangerous for you to use. You also start with three uses of the poison you choose. Whenever you have time to gather materials and a safe place to brew you can make three uses of the poison you choose for free. Note that some poisons are applied, meaning you have to carefully apply it to the target or something they eat or drink. Touch poisons just need to touch the target, they can even be used on the blade of a weapon.\n• Oil of Tagit (applied): The target falls into a light sleep\n• Bloodweed (touch): The target deals -1d4 damage ongoing until cured\n• Goldenroot (applied): The target treats the next creature they see as a trusted ally, until proved otherwise\n• Serpent’s Tears (touch): Anyone dealing damage to the target rolls twice and takes the better result."
-	},
-	poisonmaster: {
-		class: "Thief",
-		fullname: "Poison Master",
-		details: "After you’ve used a poison once it’s no longer dangerous for you to use."
-	},
-	preparespells: {
-		class: "Wizard",
-		fullname: "Prepare Spells",
-		trigger: "When you spend uninterrupted time (an hour or so) in quiet contemplation of your Spellbook",
-		details: "You:\n• Lose any Spells you already have prepared\n• Prepare new Spells of your choice from your Spellbook whose total levels don’t exceed your own level+1.\n• Prepare your cantrips which never count against your limit."
-	},
-	prodigy: {
-		class: "Wizard",
-		fullname: "Prodigy",
-		details: "Choose a spell. You prepare that spell as if it were one level lower."
-	},
-	protectivecounter: {
-		class: "Wizard",
-		fullname: "Protective Counter",
-		trigger: "When an ally within sight of you is affected by an arcane spell",
-		details: "You can counter it as if it affected you. If the spell affects multiple allies you must counter for each ally separately."
-	},
-	providence: {
-		class: "Cleric",
-		fullname: "Providence",
-		details: "You ignore the -1 penalty from two Spells you maintain."
-	},
-	quest: {
-		class: "Paladin",
-		fullname: "Quest",
-		trigger: "When you dedicate yourself to a mission through prayer and Ritual cleansing...",
-		details: "State what you set out to do:\n• Slay _______, a great blight on the land\n• Defend _______ from the iniquities that beset them\n• Discover the truth of _______\n\nThen choose up to two boons:\n• An unwavering sense of direction to _______.\n• Invulnerability to _______ (e.g., edged Weapons, fire, enchantment, etc.)\n• A mark of Divine Authority\n• Senses that pierce lies\n• A voice that transcends language\n• A freedom from hunger, thirst, and sleep\n\nThe GM will then tell you what vow or vows is required of you to maintain your blessing:\n• Honor (forbidden: cowardly tactics and tricks)\n• Temperance (forbidden: gluttony in food, drink, and pleasure of the flesh)\n• Piety (required: observance of daily holy services)\n• Valor (forbidden: suffering an evil creature to live)\n• Truth (forbidden: lies)\n• Hospitality (required: comfort to those in need, no matter who they are)"
-	},
-	quickstudy: {
-		class: "Wizard",
-		fullname: "Quick Study",
-		trigger: "When you see the effects of an arcane spell",
-		details: "Ask the GM the name of the spell and its effects. You take +1 when acting on the answers."
-	},
-	reaper: {
-		class: "Cleric",
-		fullname: "Reaper",
-		trigger: "When you take time after a conflict to dedicate your victory to your deity and deal with the dead",
-		details: "Take +1 forward."
-	},
-	redoftoothandclaw: {
-		class: "Druid",
-		fullname: "Red of Tooth and Claw",
-		trigger: "When you are in an appropriate animal form (something dangerous)",
-		details: "Increase your Damage to d8."
-	},
-	reputation: {
-		class: "Bard",
-		fullname: "Reputation",
-		trigger: "When you first meet someone who’s heard songs about you",
-		roll: "CHA",
-		success: "Tell the GM two things they've heard about you.",
-		partial: "Tell the GM one thing they've heard about you, and the GM tells you one thing."
-	},
-	ritual: {
-		class: "Wizard",
-		fullname: "Ritual",
-		trigger: "When you draw on a place of power to create a magical effect",
-		details: "Tell the GM what you’re trying to achieve. Ritual effects are always possible, but the GM will give you one to four of the following conditions:\n\n• It’s going to take days/weeks/months\n• First you must ____\n• You’ll need help from ____\n• It will require a lot of money\n• The best you can do is a lesser version, unreliable and limited\n• You and your allies will risk danger from ____\n• You’ll have to disenchant ____ to do it"
-	},
-	scentofblood: {
-		class: "Fighter",
-		fullname: "Scent of Blood",
-		trigger: "When you hack and slash an enemy",
-		details: "Your next attack against that same foe deals +1d4 Damage."
-	},
-	seeingred: {
-		class: "Fighter",
-		fullname: "Seeing Red",
-		trigger: "When  you discern realities during combat",
-		details: "You take +1."
-	},
-	selfpowered: {
-		class: "Wizard",
-		fullname: "Self-Powered",
-		trigger: "When you have time, arcane materials, and a safe space, you can create your own place of power.",
-		details: "Describe to the GM what kind of power it is and how you’re binding it to this place, the GM will tell you one kind of creature that will have an interest in your workings."
-	},
-	serenity: {
-		class: "Cleric",
-		fullname: "Serenity",
-		trigger: "When you Cast a Spell",
-		details: "You ignore the first -1 penalty from ongoing Spells."
-	},
-	seriousunderdog: {
-		class: "Thief",
-		fullname: "Serious Underdog",
-		details: "You have +1 armor. When you’re outnumbered, you have +2 armor instead."
-	},
-	setupstrike: {
-		class: "Paladin",
-		fullname: "Setup Strike",
-		trigger: "When you Hack and Slash, choose an ally.",
-		details: "Their next attack against your target does +1d4 damage."
-	},
-	shapeshifter: {
-		class: "Druid",
-		fullname: "Shapeshifter",
-		trigger: "When you call upon the spirits to change your shape",
-		roll: "WIS",
-		success: "Hold 3.",
-		partial: "Hold 2.",
-		miss: "Hold 1 in addition to whatever the GM says.",
-		details: "You may take on the physical form of any species whose essence you have studied or who lives in your land: you and your possessions meld into a perfect copy of the species’ form. You have any innate abilities and weaknesses of the form: claws, wings, gills, breathing water instead of air. You still use your normal stats but some moves may be harder to trigger—a housecat will find it hard to do battle with an ogre. The GM will also tell you one or more moves associated with your new form. Spend 1 hold to make that move. Once you’re out of hold, you return to your natural form. At any time, you may spend all your hold and revert to your natural form."
-	},
-	shed: {
-		class: "Druid",
-		fullname: "Shed",
-		trigger: "When you take Damage while shapeshifted",
-		details: "You may choose to revert to your natural form to negate the Damage."
-	},
-	shootfirst: {
-		class: "Thief",
-		fullname: "Shoot First",
-		details: "You’re never caught by surprise. When an enemy would get the drop on you, you get to act first instead."
-	},
-	smaugsbelly: {
-		class: "Ranger",
-		fullname: "Smaug's Belly",
-		trigger: "When you know your target's weakest point",
-		details: "Your arrows have 2 piercing."
-	},
-	smite: {
-		class: "Paladin",
-		fullname: "Smite",
-		trigger: "While on a quest",
-		details: "You deal +1d4 damage."
-	},
-	specialtrick: {
-		class: "Ranger",
-		fullname: "Special Trick",
-		details: "Choose a move from another class. So long as you are working with your Animal Companion you have access to that move."
-	},
-	spellaugmentation: {
-		class: "Wizard",
-		fullname: "Spell Augmentation",
-		trigger: "When you deal damage to a creature, you can shunt a spell’s energy into them",
-		details: "End one of your ongoing Spells and add the spell’s level to the Damage dealt."
-	},
-	spelldefense: {
-		class: "Wizard",
-		fullname: "Spell Defense",
-		trigger: "You may end any ongoing spell immediately and use the energy of its dissipation to deflect an oncoming attack.",
-		details: "The spell ends and you subtract its level from the damage done to you."
-	},
-	spellbook: {
-		class: "Wizard",
-		fullname: "Spellbook",
-		details: "You have mastered several Spells and inscribed them in your spellbook. You start out with three first level Spells in your spellbook as well as the cantrips. Whenever you gain a level, you add a new spell of your level or lower to your spellbook. You spellbook is 1 weight."
-	},
-	spirittongue: {
-		class: "Druid",
-		fullname: "Spirit Tongue",
-		details: "The grunts, barks, chirps, and calls of the creatures of the wild are as language to you. You can understand any animal native to your land or akin to one whose essence you have studied."
-	},
-	stalkerssister: {
-		class: "Druid",
-		fullname: "Stalker's Sister",
-		details: "Choose one move from The Ranger class list."
-	},
-	staunchdefender: {
-		class: "Paladin",
-		fullname: "Staunch Defender",
-		trigger: "When you defend",
-		details: "You always get +1 hold, even on a 6-."
-	},
-	steelhide: {
-		class: "Fighter",
-		fullname: "Steel Hide",
-		details: "You gain +2 armor."
-	},
-	strider: {
-		class: "Ranger",
-		fullname: "Strider",
-		trigger: "When you undertake a perilous journey",
-		details: "You can take two roles. Roll twice and use the better result for both roles."
-	},
-	strongarmtrueaim: {
-		class: "Thief",
-		fullname: "Strong Arm, True Aim",
-		details: "You can throw any melee weapon, using it to volley. A thrown melee weapon is gone; you can never choose to reduce ammo on a 7–9."
-	},
-	studiedessence: {
-		class: "Druid",
-		fullname: "Studied Essence",
-		trigger: "When you spend time in contemplation of an animal spirit",
-		details: "You may add its species to those you can assume using shapeshifting."
-	},
-	superiorwarrior: {
-		class: "Fighter",
-		fullname: "Superior Warrior",
-		trigger: "When you hack and slash",
-		details: "On a 12+ you deal your Damage, avoid their attack, and impress, dismay, or frighten your enemy."
-	},
-	tandemstrike: {
-		class: "Paladin",
-		fullname: "Tandem Strike",
-		trigger: "When you Hack and Slash, choose an ally.",
-		details: "Their next attack against your target does +1d4 Damage and they take +1 forward against them."
-	},
-	tasteofblood: {
-		class: "Fighter",
-		fullname: "Taste of Blood",
-		trigger: "When you hack and slash an enemy",
-		details: "Your next attack against that same foe deals +1d8 Damage."
-	},
-	thedruidsleep: {
-		class: "Druid",
-		fullname: "The Druid Sleep",
-		trigger: "When you take this move, the next opportunity that you have safety and time to spend in an appropriate location, you may attune yourself to a new land.",
-		details: "This Effect occurs only once and The GM will tell you how long it will take and what cost you must pay. From then on, you are considered to be Born of the Soil in both lands."
-	},
-	thescalesoflifeanddeath: {
-		class: "Cleric",
-		fullname: "The Scales of Life and Death",
-		trigger: "When someone takes their last breath in your presence",
-		details: "They take +1 to the roll."
-	},
-	thingtalker: {
-		class: "Druid",
-		fullname: "Thing-Talker",
-		details: "You see the spirits in the sand, the sea and the stone. You may now apply your Spirit Tongue, shapeshifting and Studied Essence to inanimate natural objects (plants and rocks) or creatures made thereof, as well as animals. Thing-talker forms can be exact copies or can be mobile vaguely humanoid-shaped entities."
-	},
-	throughdeathseyes: {
-		class: "Fighter",
-		fullname: "Through Death's Eyes",
-		trigger: "When you go into battle",
-		roll: "WIS",
-		success: "Name someone who will live AND someone who will die. Name NPCs, not player characters. The GM will make your vision come true, if it’s even remotely possible.",
-		partial: "Name someone who will live OR someone who will die. Name NPCs, not player characters. The GM will make your vision come true, if it’s even remotely possible.",
-		miss: "You see your own death and consequently take -1 ongoing throughout the battle."
-	},
-	trapexpert: {
-		class: "Thief",
-		fullname: "Trap Expert",
-		trigger: "When you spend a moment to survey a dangerous area",
-		roll: "DARK",
-		success: "Hold 3.",
-		partial: "Hold 1.",
-		miss: "Hold 0.",
-		details: "Spend your hold as you walk through the area to ask these questions:\n\n• Is there a trap here and if so, what activates it?\n• What does the trap do when activated?\n• What else is hidden here?\n"
-	},
-	tricksofthetrade: {
-		class: "Thief",
-		fullname: "Tricks of the Trade",
-		trigger: "When you pick locks or pockets or disable traps",
-		roll: "DARK",
-		success: "You do it, no problem.",
-		partial: "You do it, but the GM will offer you two options between suspicion, danger, or cost."
-	},
-	turnundead: {
-		class: "Cleric",
-		fullname: "Turn Undead",
-		trigger: "When you hold your holy symbol aloft and call on your deity for protection",
-		roll: "WIS",
-		success: "So long as you continue to pray and brandish your holy symbol, no undead may come within reach of you. You also momentarily daze intelligent undead, and cause mindless undead to flee.",
-		partial: "So long as you continue to pray and brandish your holy symbol, no undead may come within reach of you.",
-		miss: "There is no effect.",
-		details: "Aggression breaks the effects and they are able to act as normal. Intelligent undead may still find ways to harry you from afar. They’re clever like that."
-	},
-	underdog: {
-		class: "Thief",
-		fullname: "Underdog",
-		trigger: "When you're outnumbered",
-		details: "You have +1 armor."
-	},
-	undertakeaperilousjourney: {
-		fullname: "Undertake a Perilous Journey",
-		details: "When you travel through hostile territory, choose one member of the party to act as trailblazer, one to scout ahead, and one to be quartermaster (the same character cannot have two jobs). If you don’t have enough party members or choose not to assign a job, treat that job as if it had rolled a 6. Each character with a job to do rolls+Wis. On a 10+ the quartermaster reduces the number of rations required by one. On a 10+ the trailblazer reduces the amount of time it takes to reach your destination (the GM will say by how much). On a 10+ the scout will spot any trouble quick enough to let you get the drop on it. On a 7–9 each roles performs their job as expected: the normal number of rations are consumed, the journey takes about as long as expected, no one gets the drop on you but you don’t get the drop on them either."
-	},
-	unforgettableface: {
-		class: "Bard",
-		fullname: "Unforgettable Face",
-		trigger: "When you meet someone you’ve met before (your call) after some time apart",
-		details: "You take +1 forward against them."
-	},
-	unnaturalally: {
-		class: "Ranger",
-		fullname: "Unnatural Ally",
-		details: "Your Animal Companion is a monster, not an animal. Describe it. Give it +2 ferocity and +1 instinct, plus a new training."
-	},
-	viciousblast: {
-		class: "Bard",
-		fullname: "Vicious Blast",
-		trigger: "When you grant bonus Damage with Arcane Art",
-		details: "You grant an extra +2d4 Damage."
-	},
-	viciouscacophony: {
-		class: "Bard",
-		fullname: "Vicious Cacophony",
-		trigger: "When you grant bonus Damage with Arcane Art",
-		details: "You grant an extra +1d4 Damage."
-	},
-	vipersfangs: {
-		class: "Ranger",
-		fullname: "Viper's Fangs",
-		trigger: "When you strike an enemy with two Weapons at once",
-		details: "Add an extra 1d8 Damage for your off-hand strike."
-	},
-	vipersstrike: {
-		class: "Ranger",
-		fullname: "Viper’s Strike",
-		trigger: "When you strike an enemy with two Weapons at once",
-		details: "Add an extra 1d4 Damage for your off-hand strike."
-	},
-	voiceofauthority: {
-		class: "Paladin",
-		fullname: "Voice of Authority",
-		details: "Take +1 to order Hirelings."
-	},
-	wealthandtaste: {
-		class: "Thief",
-		fullname: "Wealth and Taste",
-		trigger: "When you make a show of flashing around your most valuable possession",
-		details: "Choose someone present. They will do anything they can to obtain your item or one like it."
-	},
-	weatherweaver: {
-		class: "Druid",
-		fullname: "Weather Weaver",
-		trigger: "When you are under open skies when the sun rises",
-		details: "The GM will ask you what the weather will be that day. Tell them whatever you like; it comes to pass."
-	},
-	welltrained: {
-		class: "Ranger",
-		fullname: "Well-Trained",
-		details: "Choose another training for your Animal Companion."
-	},
-	wildempathy: {
-		class: "Ranger",
-		fullname: "Wild Empathy",
-		details: "You can speak with and understand animals."
-	},
-	wildspeech: {
-		class: "Ranger",
-		fullname: "Wild Speech",
-		details: "You can speak with and understand any non-magical, non-planar creature."
-	},
-	worldtalker: {
-		class: "Druid",
-		fullname: "World-Talker",
-		details: "You see the patterns that make up the fabric of The World. You may now apply your Spirit Tongue, Shapeshifter and Studied Essence moves to pure elements—fire, water, air and earth."
-	}
+
 }
 
 // ---- Start worker scripts ----- //
@@ -2361,34 +1106,42 @@ on("sheet:opened", function() {
 
 on("clicked:bard", function(eventinfo) {
 	setupClass("Bard");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:cleric", function(eventinfo) {
 	setupClass("Cleric");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:druid", function(eventinfo) {
 	setupClass("Druid");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:fighter", function(eventinfo) {
 	setupClass("Fighter");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:paladin", function(eventinfo) {
 	setupClass("Paladin");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:ranger", function(eventinfo) {
 	setupClass("Ranger");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:thief", function(eventinfo) {
 	setupClass("Thief");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:wizard", function(eventinfo) {
 	setupClass("Wizard");
+	setAttrs({tip_confirm_flag: 1}, "silent");
 });
 
 on("clicked:cancelclass", function(eventinfo) {
@@ -2604,15 +1357,20 @@ var addMove = function(move, rowid = 0) {
 }
 
 var addBasicMoves = function() {
-	addMove("hackandslash");
-	addMove("volley");
-	addMove("parley");
-	addMove("defydanger");
-	addMove("defend");
-	addMove("discernrealities");
-	addMove("spoutlore");
-	addMove("aidorinterfere");
-	addMove("lastbreath");
+	addMove("deepDive");
+	addMove("convinceSomebody");
+	addMove("makeALink");
+	addMove("limitBreak");
+	addMove("interfere");
+	addMove("castMagic");
+	addMove("strikeWithIntent");
+	addMove("strikeToSubdue");
+	addMove("defendFromHarm");
+	addMove("pushThroughStress");
+}
+
+var addClassMoves = function() {
+
 }
 
 var parseRoll = function(rollText) { 
@@ -3202,6 +1960,7 @@ on("change:comp_name", function() {
 
 // Classname is the name of the Compendium Page.
 var setupClass = function(classname) {
+/*
 	getCompendiumPage(classname, function(page) {
 		if (page["data"]) {
 			var update = {};
@@ -3213,7 +1972,11 @@ var setupClass = function(classname) {
 			update["comp_load"] = data["Load"];
 			setAttrs(update);
 		}
-	});
+	});*/
+	var update = {};
+	update["character_class"] = classname;
+	addBasicMoves();
+	setAttrs(update);
 };
 
 </script>
